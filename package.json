@@ -1,0 +1,29 @@
+{
+  "name": "idyll_balloons_example",
+  "version": "1.0.0",
+  "license": "MIT",
+  "idyll": {
+    "theme": "default",
+    "layout": "centered",
+    "css": "styles.css",
+    "authorView": false,
+    "components": [
+      "./components/"
+    ]
+  },
+  "dependencies": {
+    "@mapbox/geo-viewport": "^0.4.0",
+    "@turf/bbox": "^6.0.1",
+    "@turf/helpers": "^6.1.4",
+    "@turf/random": "^6.0.2",
+    "d3": "^4.0.0",
+    "idyll": "^4.0.0",
+    "idyll-d3-component": "^2.0.0",
+    "mapbox-gl": "^1.0.0",
+    "react-map-gl": "^5.0.3",
+    "react-mapbox-gl": "^4.4.0"
+  },
+  "devDependencies": {
+    "gh-pages": "^0.12.0"
+  }
+}

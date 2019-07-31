@@ -1,0 +1,695 @@
+[meta title:'Crafty Map Example' description:'Crafty Map styling example' /]
+
+
+
+
+
+[var name:"fontSizeIncrease" value:1 /]
+[var name:"randomPoints" value:`{
+'type': 'Feature',
+'geometry': {
+'type': 'Polygon',
+'coordinates': [[[-67.13734351262877, 45.137451890638886],
+[-66.96466, 44.8097],
+[-68.03252, 44.3252],
+[-69.06, 43.98],
+[-70.11617, 43.68405],
+[-70.64573401557249, 43.090083319667144],
+[-70.75102474636725, 43.08003225358635],
+[-70.79761105007827, 43.21973948828747],
+[-70.98176001655037, 43.36789581966826],
+[-70.94416541205806, 43.46633942318431],
+[-71.08482, 45.3052400000002],
+[-70.6600225491012, 45.46022288673396],
+[-70.30495378282376, 45.914794623389355],
+[-70.00014034695016, 46.69317088478567],
+[-69.23708614772835, 47.44777598732787],
+[-68.90478084987546, 47.184794623394396],
+[-68.23430497910454, 47.35462921812177],
+[-67.79035274928509, 47.066248887716995],
+[-67.79141211614706, 45.702585354182816],
+[-67.13734351262877, 45.137451890638886]]]
+}
+}` /]
+
+
+[derived name:'mapstyle'  value: `{
+    'version': 8,
+    'name': 'artisticPatterns',
+    'glyphs': 'https://ta.webmapper.nl/wm/glyphs/{fontstack}/{range}.pbf',
+    'sprite': 'https://tb.webmapper.nl/wm/sprites/pattern',
+    'sources': {
+        'wm_visdata': {
+            'type': 'vector',
+            'url': 'https://tb.webmapper.nl/wm/styles/tile.json'
+        },
+        'points': {
+            'type': 'geojson',
+            'data': randomPoints
+        }
+    },
+    'layers': [
+        {
+            'id': 'background',
+            'type': 'background',
+            'paint': {
+                'background-color': '#f2f2f2',
+                'background-pattern': 'paper'
+            }
+        },
+        
+        {
+            'id': 'water-shadow-inside',
+            'type': 'line',
+            'source': 'wm_visdata',
+            'source-layer': 'water',
+            'minzoom': 9,
+            'filter': [
+                '!in',
+                'type',
+                'tidal_flat'
+            ],
+            'layout': {
+                'line-cap': 'square',
+                'line-join': 'round',
+                'line-round-limit': 5
+            },
+            'paint': {
+                'line-color': '#000',
+                'line-width': [
+                    'interpolate',
+                    [
+                        'exponential',
+                        1.25
+                    ],
+                    [
+                        'zoom'
+                    ],
+                    9,
+                    0,
+                    20,
+                    24
+                ],
+                'line-blur': [
+                    'interpolate',
+                    [
+                        'exponential',
+                        1.1
+                    ],
+                    [
+                        'zoom'
+                    ],
+                    9,
+                    0,
+                    20,
+                    12
+                ],
+                'line-translate': [
+                    'interpolate',
+                    [
+                        'exponential',
+                        1.25
+                    ],
+                    [
+                        'zoom'
+                    ],
+                    9,
+                    [
+                        'literal',
+                        [
+                            0.5,
+                            0.5
+                        ]
+                    ],
+                    20,
+                    [
+                        'literal',
+                        [
+                            6,
+                            6
+                        ]
+                    ]
+                ],
+                'line-translate-anchor': 'viewport',
+                'line-opacity': [
+                    'interpolate',
+                    [
+                        'exponential',
+                        1
+                    ],
+                    [
+                        'zoom'
+                    ],
+                    9,
+                    0.05,
+                    20,
+                    0.9
+                ]
+            }
+        },
+        {
+            'id': 'land-3',
+            'source': 'wm_visdata',
+            'source-layer': 'builtup',
+            'type': 'fill',
+            'paint': {
+                'fill-color': '#f2f2f2',
+                'fill-outline-color': '#f2f2f2',
+                'fill-opacity': 0.9
+            }
+        },
+        {
+            'id': 'water2',
+            'source': 'wm_visdata',
+            'source-layer': 'water',
+            'type': 'fill',
+            'filter': [
+                '!in',
+                'type',
+                'tidal_flat'
+            ],
+            'paint': {
+                'fill-pattern': 'dots-fill'
+            }
+        },
+        {
+            'id': 'land-1',
+            'source': 'wm_visdata',
+            'source-layer': 'natural',
+            'type': 'fill',
+            'paint': {
+                'fill-color': '#f2f2f2',
+                'fill-outline-color': '#f2f2f2'
+            }
+        },
+        {
+            'id': 'land-2',
+            'source': 'wm_visdata',
+            'source-layer': 'agricultural',
+            'type': 'fill',
+            'paint': {
+                'fill-color': '#f2f2f2',
+                'fill-outline-color': '#f2f2f2'
+            }
+        },
+        {
+            'id': 'agriculture',
+            'source': 'wm_visdata',
+            'source-layer': 'agricultural',
+            'type': 'fill',
+            'paint': {
+                'fill-pattern': 'agri'
+            }
+        },
+        {
+            'id': 'land-4',
+            'source': 'wm_visdata',
+            'source-layer': 'infrastructure',
+            'type': 'fill',
+            'paint': {
+                'fill-color': '#f2f2f2',
+                'fill-outline-color': '#f2f2f2'
+            }
+        },
+        {
+            'id': 'water',
+            'source': 'wm_visdata',
+            'source-layer': 'water',
+            'type': 'line',
+            'filter': [
+                '!in',
+                'type',
+                'tidal_flat'
+            ],
+            'layout': {
+                'line-cap': 'square',
+                'line-join': 'round',
+                'line-miter-limit': 1
+            },
+            'paint': {
+                'line-pattern': 'line-dots',
+                'line-width': [
+                    'interpolate',
+                    [
+                        'exponential',
+                        1.4
+                    ],
+                    [
+                        'zoom'
+                    ],
+                    9,
+                    0,
+                    20,
+                    32
+                ],
+                'line-offset': [
+                    'interpolate',
+                    [
+                        'exponential',
+                        1.1
+                    ],
+                    [
+                        'zoom'
+                    ],
+                    9,
+                    0,
+                    20,
+                    -2
+                ]
+            }
+        },
+        {
+            'id': 'water-line-z0-z9',
+            'source': 'wm_visdata',
+            'source-layer': 'water',
+            'type': 'line',
+            'maxzoom':11,
+            'filter': [
+                '!in',
+                'type',
+                'tidal_flat'
+            ],
+            'layout': {
+                'line-cap': 'square',
+                'line-join': 'round',
+                'line-miter-limit': 1
+            },
+            'paint': {
+                'line-width': 0.1,
+                'line-color': '#535353'
+            }
+        },
+        {
+            'id': 'natural',
+            'source': 'wm_visdata',
+            'source-layer': 'natural',
+            'type': 'fill',
+            'layout': {
+                'visibility': 'none'
+            },
+            'paint': {
+                'fill-color': '#f2f2f2',
+                'fill-outline-color': '#f2f2f2'
+            }
+        },
+        {
+                'id': 'railways',
+                'source': 'wm_visdata',
+                'source-layer': 'railways',
+                'type': 'line',
+                'paint':{
+                    'line-color': '#535353',
+                    'line-width': 2,
+                    'line-opacity': 0.5,
+                    'line-dasharray': [2,3]
+                }
+        },
+        
+        {
+            'id': 'urban-area-line',
+            'source': 'wm_visdata',
+            'source-layer': 'builtup',
+            'type': 'line',
+            'maxzoom': 14.5,
+            'filter': [
+                'all',
+                [
+                    '==',
+                    'type',
+                    'area'
+                ]
+            ],
+            'layout': {
+                'line-cap': 'round',
+                'line-join': 'round'
+            },
+            'paint': {
+                'line-color': '#535353',
+                'line-width': 3.5,
+                'line-blur': 0.5
+            }
+        },
+        {
+            'id': 'urban-area-fill',
+            'source': 'wm_visdata',
+            'source-layer': 'builtup',
+            'type': 'fill',
+            'maxzoom': 14.5,
+            'filter': [
+                'all',
+                [
+                    '==',
+                    'type',
+                    'area'
+                ]
+            ],
+            'layout': {
+               
+            },
+            'paint': {
+                'fill-color': '#f2f2f2'
+            }
+        },
+        {
+            'id': 'urban-area',
+            'source': 'wm_visdata',
+            'source-layer': 'builtup',
+            'type': 'fill',
+            'maxzoom': 14.5,
+            'filter': [
+                'all',
+                [
+                    '==',
+                    'type',
+                    'area'
+                ]
+            ],
+            'layout': {
+               
+            },
+            'paint': {
+                'fill-opacity': ['interpolate', ['linear'], ['zoom'],
+                13.5, 1,
+                15.9, 0
+                ],
+                'fill-pattern': [
+                'step',['zoom'],
+                'house-fill-small',
+                10 , 'house-fill',
+                11  , 'house-fill-big'
+                
+            ]
+            }
+        },
+        {
+            'id': 'bos-lijn-shadow',
+            'source': 'wm_visdata',
+            'source-layer': 'natural',
+            'type': 'line',
+            'filter': [
+                '==',
+                'type',
+                'high'
+            ],
+            'layout': {
+                'line-cap': 'square',
+                'line-join': 'round',
+                'line-round-limit': 5
+            },
+            'paint': {
+                'line-color': '#000',
+                'line-width': [
+                    'interpolate',
+                    [
+                        'exponential',
+                        1
+                    ],
+                    [
+                        'zoom'
+                    ],
+                    9,
+                    0,
+                    20,
+                    10
+                ],
+                'line-blur': [
+                    'interpolate',
+                    [
+                        'exponential',
+                        1
+                    ],
+                    [
+                        'zoom'
+                    ],
+                    9,
+                    0,
+                    20,
+                    5
+                ],
+                'line-translate': [
+                    'interpolate',
+                    [
+                        'exponential',
+                        1
+                    ],
+                    [
+                        'zoom'
+                    ],
+                    9,
+                    [
+                        'literal',
+                        [
+                            0.5,
+                            0.5
+                        ]
+                    ],
+                    20,
+                    [
+                        'literal',
+                        [
+                            1.5,
+                            1.5
+                        ]
+                    ]
+                ],
+                'line-translate-anchor': 'viewport',
+                'line-opacity': [
+                    'interpolate',
+                    [
+                        'exponential',
+                        1
+                    ],
+                    [
+                        'zoom'
+                    ],
+                    9,
+                    0.05,
+                    20,
+                    0.9
+                ]
+            }
+        },
+        {
+            'id': 'roads',
+            'source': 'wm_visdata',
+            'source-layer': 'roads',
+            'type': 'line',
+            'paint': {
+                'line-color': '#ffffff',
+                'line-width': [
+                    'match',
+                    [
+                        'get',
+                        'type'
+                    ],
+                    'highway',
+                    8,
+                    'motorway',
+                    7,
+                    'local',
+                    4,
+                    5
+                ],
+                'line-opacity': 1,
+                'line-blur': 0.5
+            }
+        },
+        {
+            'id': 'roads2',
+            'source': 'wm_visdata',
+            'source-layer': 'roads',
+            'type': 'line',
+            'layout':{
+                'line-join': 'round',
+                'line-cap': 'round'
+            },
+            'paint': {
+                'line-pattern': 'line',
+                'line-width': [
+                    'match',
+                    [
+                        'get',
+                        'type'
+                    ],
+                    'highway',
+                    4,
+                     'motorway',
+                    3,
+                    'local',
+                    1,
+                    2
+                ]
+            }
+        },
+        {
+            'id': 'bos',
+            'source': 'wm_visdata',
+            'source-layer': 'natural',
+            'type': 'fill-extrusion',
+            'filter': [
+                '==',
+                'type',
+                'high'
+            ],
+            'paint': {
+                'fill-extrusion-pattern': 'forest2',
+                'fill-extrusion-height': 4
+            }
+        },
+        {
+            'id': 'building',
+            'source': 'wm_visdata',
+            'source-layer': 'builtup',
+            'type': 'symbol',
+            'minzoom': 13,
+            'filter': [
+                'all',
+                [
+                    '==',
+                    'type',
+                    'building'
+                ]
+            ],
+            'layout': {
+                'symbol-placement': 'line-center',
+                'symbol-spacing': 50,
+                'icon-image': 'house',
+                'icon-anchor': 'bottom',
+                'icon-rotation-alignment': 'viewport',
+                'icon-pitch-alignment': 'viewport',
+                'icon-allow-overlap': true,
+                'icon-padding': 10,
+                'icon-size': ['interpolate', ['linear'], ['zoom'],
+                13, 0.3,
+                15,1
+                ]
+            },
+            'paint': {
+                'icon-opacity': 1
+                
+            }
+        },
+         {
+            'id': 'place-labels',
+            'type': 'symbol',
+            'source': 'wm_visdata',
+            'source-layer': 'labels',
+            'filter': [
+                'all',
+                [
+                    '==',
+                    'type',
+                    'place'
+                ],
+                [
+                    '!=',
+                    'subtype',
+                    'urban_district'
+                ]
+            ],
+            'minzoom': 8,
+            'maxzoom': 16,
+            'layout': {
+                'text-allow-overlap': false,
+                'text-padding': 5,
+                'text-size': [
+                    'interpolate',
+                    [
+                        'exponential',
+                        0.9
+                    ],
+                    [
+                        'get',
+                        'hierarchy'
+                    ],
+                    1,
+                    46*fontSizeIncrease,
+                    6,
+                    23 *fontSizeIncrease,
+                    7,0
+                ],
+                'text-font': ['Giraffey'],
+                'text-field': ['upcase',['get','name']],
+                'text-rotation-alignment': 'viewport'
+            },
+            'paint': {
+                'text-halo-blur': 0.5,
+                'text-color':  '#000000',
+                'text-halo-width': 2,
+                'text-halo-color': '#fff'
+            }
+        },
+        {
+            'id': 'Balloonpoints',
+            'type': 'symbol',
+            'source': 'points',
+            'layout': {
+                'icon-image': 'balloon',
+                'icon-allow-overlap': true,
+                'icon-anchor': 'bottom',
+                'icon-offset': [0, -10],
+                'icon-size': ['interpolate', ['linear'], ['zoom'],
+                0, 0.1,
+                8, 0.3,
+                12, 1]
+            },
+            'paint': {}
+        }
+    ]
+}`/]
+
+[var name:"count" value:10 /]
+
+[Float  position:"left" height:700 ]
+
+# Random Hot Air Balloons!! 
+
+[div name:'centerdiv']
+
+Amount of Balloons: [Display value:count /]
+
+0 [Range min:0 max:1000 step:10 value:count /] 1000
+[/div]
+
+```js
+const drawRandomPoints = function(amount) {
+  let bounds = map.getBounds();
+  let points = turf.randomPoint(amount, {
+    bbox: [bounds._sw.lng, bounds._sw.lat,  bounds._ne.lng, bounds._ne.lat]
+  });
+  return points;
+};
+
+map.addLayer({
+    id: "points",
+    type: "symbol",
+    source: {
+        type: "geojson",
+        data: drawRandomPoints(100)
+    },
+    layout: {
+        "icon-image": "balloon",
+        "icon-allow-overlap": true,
+        "icon-anchor": "bottom",
+        "icon-offset": [0, -10],
+        "icon-size": [ "interpolate", ["linear"],["zoom"],
+            0, 0.1,
+            8, 0.3,
+            12, 1
+        ]
+    },
+    paint: {}
+});
+```
+
+[/Float]
+
+[Float position:"right"]
+
+[CustomMap 
+    name: 'testmap' 
+    mapStyle: mapstyle 
+    count: count 
+    value: randomPoints /]
+[/Float]
+
